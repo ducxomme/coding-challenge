@@ -1,0 +1,50 @@
+server {
+    listen 80;
+    listen [::]:80;
+    #server_name _;
+    client_max_body_size 10m;
+
+    root /var/www/public;
+    index index.php index.html;
+
+    access_log /var/log/nginx/access.log json;
+    error_log  /var/log/nginx/error.log;
+
+    # タイムアウトを明示する。
+    # php は 180 秒でタイムアウトさせるので、nginx は、それより長い 190 秒にしている。
+    # 注意) API GW は 30秒でコネクションを閉じてしまうのであまり重要ではない
+    # fastcgi_read_timeout 190;
+
+    # https://qiita.com/tt2004d/items/59fdb3702230641a9198
+    # X-FORWARDED-PROTOを使ってHTTPS判定する変数を作成
+    # ヘルスチェックはログに出さない！！
+    set $elb_https off;
+    if ($http_x_forwarded_proto = https) {
+        set $elb_https on;
+    }
+    location = /healthcheck.html {
+        access_log off;
+        break;
+    }
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+        gzip_static on;
+    }
+
+    location ~ \.php$ {
+        try_files $uri =404;
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        fastcgi_pass ${PHP_APP_HOST};
+        fastcgi_index index.php;
+        fastcgi_hide_header X-Powered-By;
+        include fastcgi_params; # その他FastCGI設定ファイルを読み込む
+        # PHP-FPMがプログラムを実行するときに必要なパラメータを渡す。サーバ変数のようなもの。
+        # パスだけでなく、リクエストヘッダーだったりスキーマ情報だったりを渡している。
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param PATH_INFO $fastcgi_path_info;
+        fastcgi_param HTTP_REQUEST_ID $request_id;
+        fastcgi_param HTTPS $elb_https;
+        fastcgi_intercept_errors on;
+    }
+}
