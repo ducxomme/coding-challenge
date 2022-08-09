@@ -61,15 +61,6 @@ server {
         return 429 '{"error": {"status_code": 429,"status": "Too many requests"}}';
     }
 
-    # https://serverfault.com/questions/562756/how-to-remove-the-path-with-an-nginx-proxy-pass/562850#562850
-    location = /people {
-        return 302 /v1/;
-    }
-
-    location /people/ {
-        proxy_pass http://localhost/;  # note the trailing slash here, it matters!
-    }
-
     location /v1/ {
         set $no_cache 1;
         limit_req_status 429;
