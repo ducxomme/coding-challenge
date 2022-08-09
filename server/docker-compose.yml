@@ -17,11 +17,13 @@ services:
     environment:
       SERVICE_NAME: app
       SERVICE_TAGS: dev
+      USE_INMEMORY_MYSQL_GATEWAY: 'false'
+      API_DOMAIN: localhost
+      DB_CONNECTION: mysql
       LOG_CHANNEL: stack
       APP_LOG_LEVEL: debug
-      APP_ENV: local # or 'production' = aws environment
-      APP_DEBUG: 'false' # https://reffect.co.jp/laravel/env-file-basic-understanding
-      # for testing
+      APP_ENV: local
+      APP_DEBUG: 'false'
       APP_URL: http://localhost
     working_dir: /var/www
     networks:
@@ -49,7 +51,6 @@ services:
     networks:
       - backend
     volumes:
-      # - ./:/var/www
       - ./public:/var/www/public
       - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./docker/nginx/conf.d/default.conf.template:/etc/nginx/templates/default.conf.template

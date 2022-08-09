@@ -3,15 +3,10 @@ ARG VERSION=alpine
 FROM nginx:${VERSION} as core
 
 # https://stackoverflow.com/questions/56649582/substitute-environment-variables-in-nginx-config-from-docker-compose
-# RUN mkdir -p /etc/nginx/templates /var/www/public
 RUN mkdir -p /etc/nginx/templates
 COPY docker/nginx/nginx.conf /etc/nginx/nginx.conf
 COPY docker/nginx/conf.d/default_and_auth.conf.template /etc/nginx/templates/default.conf.template
-# COPY docker/nginx/healthcheck.html /var/www/public/
 COPY public /var/www/public
-
-#COPY docker/nginx/conf.d/default.conf.template /etc/nginx/templates/
-#COPY . /var/www/
 
 # Validate the config
 RUN echo "Download nginx-${NGINX_VERSION}" && nginx -t

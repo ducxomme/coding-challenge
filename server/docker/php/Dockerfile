@@ -1,4 +1,4 @@
-FROM php:7.4.12-fpm-alpine as core
+FROM php:8.0-fpm-alpine as core
 
 STOPSIGNAL SIGTERM
 
@@ -49,36 +49,15 @@ COPY docker/php/php.ini "$PHP_INI_DIR/php.ini"
 
 # Copy existing application directory permissions
 COPY --chown=www:www . /var/www
-RUN composer install -n --prefer-dist
+
+RUN composer install
 
 RUN > .phpunit.result.cache && chown www:www .phpunit.result.cache
 
-# Expose port 9000 and start php-fpm server
+# Expose port 9000 and start php-fpm server1
 EXPOSE 9000
 
 # Change current user to www
-USER www
-
-FROM core as batch
-USER root
-
-RUN apk add bash jq
-
-RUN apk add --no-cache \
-        python3 \
-        py3-pip \
-    && pip3 install --upgrade pip \
-    && pip3 install \
-        awscli \
-    && rm -rf /var/cache/apk/*
-
-COPY docker/php/entrypoint_batch.sh docker/php/worker.sh /usr/local/bin/
-
-USER www
-
-ENTRYPOINT ["tini", "--", "entrypoint_batch.sh"]
-CMD ["worker.sh"]
-
 USER www
 
 FROM core as debug
@@ -91,7 +70,7 @@ RUN apk update && apk add --update --no-cache \
     git \
     procps \
     curl && \
-    pecl install xdebug-2.9.6 && \
+    pecl install xdebug && \
     docker-php-ext-enable xdebug
 RUN touch /var/log/xdebug.log && chmod 666 /var/log/xdebug.log
 USER www
