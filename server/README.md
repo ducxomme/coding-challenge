@@ -51,9 +51,3 @@ $ php artisan ide-helper:generate
 ```shell script
 $ php artisan ide-helper:model
 ```
-
-個別に適用するときは、
-
-```shell script
-php artisan ide-helper:models App\\Models\\Individual\\Employee
-```
