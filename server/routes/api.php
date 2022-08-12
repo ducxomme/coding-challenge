@@ -16,4 +16,4 @@ use Illuminate\Routing\Router;
 */
 
 /** @var Router $router */
-$router->get('/v1/', \App\Http\Controllers\Api\V1\RestaurantListGetController::class);
+$router->get('/v1/food-trucks', \App\Http\Controllers\Api\V1\FoodTruckListGetController::class);
