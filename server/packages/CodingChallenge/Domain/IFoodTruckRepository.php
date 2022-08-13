@@ -15,9 +15,9 @@ interface IFoodTruckRepository
 
     /**
      * @param FoodTruckCollection $foodTrucks
-     * @param Location $location
+     * @param Location|null $location
      * @return FoodTruckCollection
      */
     public function getNearFoodTrucks(FoodTruckCollection $foodTrucks,
-                                      Location $location): FoodTruckCollection;
+                                      ?Location $location): FoodTruckCollection;
 }
