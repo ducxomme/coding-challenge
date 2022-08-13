@@ -1,0 +1,12 @@
+version: '3.7'
+# for debug
+
+services:
+  webserver:
+    build:
+      target: debug
+    image: coding-challenge/web:debug-latest
+    volumes:
+      - ./docker/nginx/conf.d/debug.conf:/etc/nginx/templates/default.conf.template
+      - ./docker/nginx/nginx-debug-sample.conf:/etc/nginx/nginx.conf
+    command: ["nginx-debug", "-g", "daemon off;"]
