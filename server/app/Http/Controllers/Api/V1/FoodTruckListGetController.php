@@ -31,6 +31,6 @@ final class FoodTruckListGetController
 
         $result = $service->handle($command);
 
-        return response()->json($result);
+        return response()->json($result->toArray());
     }
 }

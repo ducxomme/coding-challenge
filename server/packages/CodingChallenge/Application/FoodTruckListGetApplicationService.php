@@ -3,6 +3,10 @@ declare(strict_types=1);
 
 namespace CodingChallenge\Application;
 
+use CodingChallenge\Domain\FoodTruckListGetResult;
+use CodingChallenge\Domain\IFoodTruckRepository;
+use CodingChallenge\Domain\IGoogleRepository;
+
 /**
  * class FoodTruckListGetApplicationService
  */
@@ -38,7 +42,10 @@ final class FoodTruckListGetApplicationService implements IFoodTruckListGetAppli
         $foodTrucks = $this->foodTruckRepository->get();
 
         // Get longitude, latitude from specified address
-        $location = $this->googleRepository->getLocation($command->getAddress());
+        $location = null;
+        if (!empty($command->getAddress())) {
+            $location = $this->googleRepository->getLocation($command->getAddress());
+        }
 
         $nearFoodTrucks = $this->foodTruckRepository->getNearFoodTrucks($foodTrucks, $location);
 

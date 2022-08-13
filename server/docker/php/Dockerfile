@@ -1,4 +1,4 @@
-FROM php:8.0-fpm-alpine as core
+FROM php:8.1-fpm-alpine as core
 
 STOPSIGNAL SIGTERM
 
