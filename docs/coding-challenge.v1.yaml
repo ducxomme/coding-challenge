@@ -1,0 +1,63 @@
+openapi: 3.0.0
+info:
+  title: Coding-Challenge
+  version: '1.0'
+  description: |
+    # 概要
+      このドキュメントでは Coding-Challenge の Food Trucks の仕様について説明します。
+servers:
+  - url: 'https://api-xxx.com'
+    description: ステージング環境
+  - url: 'https://api.yyy.com'
+    description: 本番環境
+paths:
+  /food-trucks:
+    get:
+      summary: 隣にあるFood Trucksを取得する
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        address:
+                          type: string
+                          description: Food Truckの位置
+                        latitude:
+                          type: number
+                          description: 緯度
+                        longitude:
+                          type: number
+                          description: 軽度
+              examples:
+                隣にあるFood Trucksをリストで取得する:
+                  value:
+                    data:
+                      - id: xxx
+                        address: Assessors Block 7283/Lot004
+                        latitude: 37.76201920035647
+                        longitude: -122.42730642251331
+                      - id: yyy
+                        address: 475 CALIFORNIA ST
+                        latitude: 37.76201920035647
+                        longitude: -122.42730642251331
+      operationId: get-food-trucks
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: address
+          description: 検索したい住所
+          explode: false
+      tags:
+        - Food Trucks
+    parameters: []
