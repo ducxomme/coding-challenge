@@ -58,6 +58,47 @@ final class FoodTruckRepository implements IFoodTruckRepository
     public function getNearFoodTrucks(FoodTruckCollection $foodTrucks,
                                       ?Location $location): FoodTruckCollection
     {
-        return $foodTrucks;
+        // 住所が指定されてない場合、単純にリストを返す
+        if (is_null($location)) {
+            return $foodTrucks;
+        }
+
+        $collection = new FoodTruckCollection();
+        foreach ($foodTrucks->getEntities() as $foodTruck) {
+            if ($this->distance($location->getLatitude(), $location->getLongitude(),
+                $foodTruck->getLatitude(), $foodTruck->getLongitude()) <= FoodTruck::MAXIMUM_DISTANCE) {
+                $collection->add($foodTruck);
+            }
+        }
+
+        $totalCount = count($collection->getEntities());
+
+
+        return $collection;
+    }
+
+    /**
+     * @param Latitude $latFrom
+     * @param Longitude $longFrom
+     * @param Latitude $latTo
+     * @param Longitude $longTo
+     * @return float
+     */
+    private function distance(Latitude $latFrom, Longitude $longFrom,
+                              Latitude $latTo, Longitude $longTo): float
+    {
+        // convert from degrees to radians
+        $latFrom = deg2rad($latFrom->getValue());
+        $longFrom = deg2rad($longFrom->getValue());
+        $latTo = deg2rad($latTo->getValue());
+        $longTo = deg2rad($longTo->getValue());
+
+        $latDelta = $latTo - $latFrom;
+        $longDelta = $longTo - $longFrom;
+
+        $angle = 2 * asin(sqrt(pow(sin($latDelta / 2), 2) +
+                cos($latFrom) * cos($latTo) * pow(sin($longDelta / 2), 2)));
+
+        return $angle * 6371000;
     }
 }

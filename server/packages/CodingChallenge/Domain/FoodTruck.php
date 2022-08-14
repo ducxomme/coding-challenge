@@ -9,6 +9,9 @@ namespace CodingChallenge\Domain;
  */
 final class FoodTruck
 {
+    // 20km 以内に FoodTruck を対象する
+    const MAXIMUM_DISTANCE = 20000;
+
     /**
      * @var Id|null
      */
