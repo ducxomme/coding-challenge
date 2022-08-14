@@ -71,9 +71,6 @@ final class FoodTruckRepository implements IFoodTruckRepository
             }
         }
 
-        $totalCount = count($collection->getEntities());
-
-
         return $collection;
     }
 
