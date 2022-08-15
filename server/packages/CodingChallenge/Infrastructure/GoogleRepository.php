@@ -20,7 +20,7 @@ final class GoogleRepository implements IGoogleRepository
      * @inheritDoc
      * @throws Exception
      */
-    public function getLocation(string $address): Location
+    public function getLocation(string $address): ?Location
     {
         $baseUrl = 'https://maps.googleapis.com/maps/api/geocode/json';
         $key = env('GOOGLE_API_KEY');
