@@ -17,7 +17,6 @@ services:
     environment:
       SERVICE_NAME: app
       SERVICE_TAGS: dev
-      USE_INMEMORY_MYSQL_GATEWAY: 'false'
       API_DOMAIN: localhost
       DB_CONNECTION: mysql
       LOG_CHANNEL: stack

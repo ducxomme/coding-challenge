@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace CodingChallenge\Infrastructure;
 
 use CodingChallenge\Domain\Address;
-use CodingChallenge\Domain\FoodItem;
 use CodingChallenge\Domain\FoodTruck;
 use CodingChallenge\Domain\FoodTruckCollection;
 use CodingChallenge\Domain\Id;
@@ -16,7 +15,8 @@ use CodingChallenge\Infrastructure\Common\ApiClient;
 use Exception;
 
 /**
- *
+ * Class FoodTruckRepository
+ * @package CodingChallenge\Infrastructure
  */
 final class FoodTruckRepository implements IFoodTruckRepository
 {
